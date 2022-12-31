@@ -28,10 +28,10 @@ from config import WAITING_TIME
 
 class Player(object):
     """
-    This class represents a player.
-    It is basically a doubly-linked ring list with the option to reverse the
-    direction. On initialization, it will connect itself to a game and its
-    other players by placing itself behind the current player.
+    Esta classe representa um jogador.
+    É basicamente uma lista de anéis duplamente ligada com a opção de reverter o
+    direção. Na inicialização, ele se conectará a um jogo e sua
+    outros jogadores, colocando-se atrás do jogador atual.
     """
 
     def __init__(self, game, user):
@@ -68,7 +68,7 @@ class Player(object):
             raise
 
     def leave(self):
-        """Removes player from the game and closes the gap in the list"""
+        """Remove o jogador do jogo e fecha a lacuna na lista"""
         if self.next is self:
             return
 
@@ -111,7 +111,7 @@ class Player(object):
             self._next = player
 
     def draw(self):
-        """Draws 1+ cards from the deck, depending on the draw counter"""
+        """Pegue 1+ cartas do convés, dependendo do contador de sorteio"""
         _amount = self.game.draw_counter or 1
 
         try:
