@@ -34,8 +34,8 @@ def show_settings(update: Update, context: CallbackContext):
 
     if update.message.chat.type != 'private':
         send_async(context.bot, chat.id,
-                   text=_("Please edit your settings in a private chat with "
-                          "the bot."))
+                   text=_("Edite suas configurações em um bate-papo privado com "
+                          "o bot."))
         return
 
     us = UserSetting.get(id=update.message.from_user.id)
@@ -44,12 +44,12 @@ def show_settings(update: Update, context: CallbackContext):
         us = UserSetting(id=update.message.from_user.id)
 
     if not us.stats:
-        stats = '📊' + ' ' + _("Enable statistics")
+        stats = '📊' + ' ' + _("Habilitar estatísticas")
     else:
-        stats = '❌' + ' ' + _("Delete all statistics")
+        stats = '❌' + ' ' + _("Excluir todas as estatísticas")
 
-    kb = [[stats], ['🌍' + ' ' + _("Language")]]
-    send_async(context.bot, chat.id, text='🔧' + ' ' + _("Settings"),
+    kb = [[stats], ['🌍' + ' ' + _("Idioma")]]
+    send_async(context.bot, chat.id, text='🔧' + ' ' + _("Configurações"),
                reply_markup=ReplyKeyboardMarkup(keyboard=kb,
                                                 one_time_keyboard=True))
 
@@ -63,13 +63,13 @@ def kb_select(update: Update, context: CallbackContext):
     if option == '📊':
         us = UserSetting.get(id=user.id)
         us.stats = True
-        send_async(context.bot, chat.id, text=_("Enabled statistics!"))
+        send_async(context.bot, chat.id, text=_("Estatísticas habilitadas!"))
 
     elif option == '🌍':
         kb = [[locale + ' - ' + descr]
               for locale, descr
               in sorted(available_locales.items())]
-        send_async(context.bot, chat.id, text=_("Select locale"),
+        send_async(context.bot, chat.id, text=_("Selecionar localidade"),
                    reply_markup=ReplyKeyboardMarkup(keyboard=kb,
                                                     one_time_keyboard=True))
 
@@ -79,7 +79,7 @@ def kb_select(update: Update, context: CallbackContext):
         us.first_places = 0
         us.games_played = 0
         us.cards_played = 0
-        send_async(context.bot, chat.id, text=_("Deleted and disabled statistics!"))
+        send_async(context.bot, chat.id, text=_("Estatísticas excluídas e desabilitadas!"))
 
 
 @user_locale
@@ -92,7 +92,7 @@ def locale_select(update: Update, context: CallbackContext):
         us = UserSetting.get(id=user.id)
         us.lang = option
         _.push(option)
-        send_async(context.bot, chat.id, text=_("Set locale!"))
+        send_async(context.bot, chat.id, text=_("Definir localidade!"))
         _.pop()
 
 def register():
