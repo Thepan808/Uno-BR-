@@ -113,7 +113,7 @@ def add_mode_fast(results):
             "mode_fast",
             title=_("🚀 Sanic mode"),
             input_message_content=
-            InputTextMessageContent(_('Tem que ir rápido! 🚀'))
+            InputTextMessageContent(_('Modo Sanic! 🚀'))
         )
     )
 
@@ -125,7 +125,7 @@ def add_mode_wild(results):
             "mode_wild",
             title=_("🐉 Wild mode"),
             input_message_content=
-            InputTextMessageContent(_('Na Natureza~ 🐉'))
+            InputTextMessageContent(_('Modo Wild~ 🐉'))
         )
     )
 
@@ -205,7 +205,7 @@ def add_card(game, card, results, can_play):
         )
         if game.mode == "text":
             results.append(
-                Sticker(str(card), sticker_file_id=c.STICKERS[str(card)], input_message_content=InputTextMessageContent("Card Played: {card}".format(card=repr(card).replace('Draw Four', '+4').replace('Draw', '+2').replace('Colorchooser', 'Color Chooser')))
+                Sticker(str(card), sticker_file_id=c.STICKERS[str(card)], input_message_content=InputTextMessageContent("Cartas jogadas: {card}".format(card=repr(card).replace('Mais quatro', '+4').replace('Draw', '+2').replace('Colorchooser', 'Seletor de cores')))
         ))
     else:
         results.append(
