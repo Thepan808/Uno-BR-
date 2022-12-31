@@ -75,19 +75,19 @@ def modes(update: Update, context: CallbackContext):
       " 🚀 O modo Sanic usa o baralho UNO convencional e o bot ignora automaticamente um jogador se ele demorar muito para jogar sua vez.\n"
       " 🐉 O modo Wild usa um baralho com mais cartas especiais, menos variedade de números e nenhum salto automático.\n"
       " ✍️ O modo Texto usa o deck UNO convencional, mas em vez de adesivos ele usa o texto.\n\n"
-      "To change the game mode, the GAME CREATOR has to type the bot nickname and a space, "
-      "just like when playing a card, and all gamemode options should appear.")
+      "Para alterar o modo de jogo, o CRIADOR do JOGO tem que digitar o apelido do bot e um espaço, "
+      "assim como ao jogar uma carta, e todas as opções de modo de jogo devem aparecer.")
     send_async(context.bot, update.message.chat_id, text=modes_explanation,
                parse_mode=ParseMode.HTML, disable_web_page_preview=True)
 
 @user_locale
 def source(update: Update, context: CallbackContext):
-    """Handler for the /help command"""
-    source_text = _("This bot is Free Software and licensed under the AGPL. "
-      "The code is available here: \n"
-      "https://github.com/jh0ker/mau_mau_bot")
+    """Manipulador para o /help comando"""
+    source_text = _("Este bot é Software Livre e licenciado sob a AGPL. "
+      "É sobre isso: \n"
+      "https://t.me/botssaved")
     attributions = _("Attributions:\n"
-      'Draw icon by '
+      'Ícone de desenho por '
       '<a href="http://www.faithtoken.com/">Faithtoken</a>\n'
       'Pass icon by '
       '<a href="http://delapouite.com/">Delapouite</a>\n'
@@ -101,9 +101,9 @@ def source(update: Update, context: CallbackContext):
 
 @user_locale
 def news(update: Update, context: CallbackContext):
-    """Handler for the /news command"""
+    """Manipulador para o /news comando"""
     send_async(context.bot, update.message.chat_id,
-               text=_("All news here: https://telegram.me/unobotupdates"),
+               text=_("Todas as notícias aqui: https://telegram.me/botssaved"),
                disable_web_page_preview=True)
 
 
@@ -113,30 +113,30 @@ def stats(update: Update, context: CallbackContext):
     us = UserSetting.get(id=user.id)
     if not us or not us.stats:
         send_async(context.bot, update.message.chat_id,
-                   text=_("You did not enable statistics. Use /settings in "
-                          "a private chat with the bot to enable them."))
+                   text=_("Você não habilitou estatísticas. Usar /settings em "
+                          "um bate-papo privado com o bot para habilitá-los."))
     else:
         stats_text = list()
 
         n = us.games_played
         stats_text.append(
-            _("{number} game played",
-              "{number} games played",
+            _("{number} jogo jogado",
+              "{number} jogos jogados",
               n).format(number=n)
         )
 
         n = us.first_places
         m = round((us.first_places / us.games_played) * 100) if us.games_played else 0
         stats_text.append(
-            _("{number} first place ({percent}%)",
-              "{number} first places ({percent}%)",
+            _("{number} primeiro lugar ({percent}%)",
+              "{number} primeiros lugares ({percent}%)",
               n).format(number=n, percent=m)
         )
 
         n = us.cards_played
         stats_text.append(
-            _("{number} card played",
-              "{number} cards played",
+            _("{number} cartas jogadas",
+              "{number} cartas jogadas",
               n).format(number=n)
         )
 
