@@ -669,8 +669,8 @@ def process_result(update: Update, context: CallbackContext):
         # First 5 characters are 'mode_', the rest is the gamemode.
         mode = result_id[5:]
         game.set_mode(mode)
-        logger.info("Gamemode changed to {mode}".format(mode = mode))
-        send_async(context.bot, chat.id, text=__("Gamemode changed to {mode}".format(mode = mode)))
+        logger.info("Modo de jogo alterado para {mode}".format(mode = mode))
+        send_async(context.bot, chat.id, text=__("Modo de jogo alterado para {mode}".format(mode = mode)))
         return
     elif len(result_id) == 36:  # UUID result
         return
