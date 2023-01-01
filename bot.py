@@ -58,8 +58,8 @@ def notify_me(update: Update, context: CallbackContext):
     if update.message.chat.type == 'private':
         send_async(bot,
                    chat_id,
-                   text=_("Send this command in a group to be notified "
-                          "when a new game is started there."))
+                   text=_("Enviar este comando em um grupo para ser notificado "
+                          "quando um novo jogo é iniciado lá."))
     else:
         try:
             gm.remind_dict[chat_id].add(update.message.from_user.id)
@@ -81,7 +81,7 @@ def new_game(update: Update, context: CallbackContext):
             for user in gm.remind_dict[update.message.chat_id]:
                 send_async(bot,
                            user,
-                           text=_("A new game has been started in {title}").format(
+                           text=_("Um novo jogo foi iniciado em {title}").format(
                                 title=update.message.chat.title))
 
             del gm.remind_dict[update.message.chat_id]
@@ -91,8 +91,8 @@ def new_game(update: Update, context: CallbackContext):
         game.owner.append(update.message.from_user.id)
         game.mode = DEFAULT_GAMEMODE
         send_async(context.bot, chat_id,
-                   text=_("Created a new game! Join the game with /join "
-                          "and start the game with /start"))
+                   text=_("Criou um novo jogo! Junte-se ao jogo com /join "
+                          "e comece o jogo com /start"))
 
 
 @user_locale
@@ -108,7 +108,7 @@ def kill_game(update: Update, context: CallbackContext):
 
     if not games:
             send_async(context.bot, chat.id,
-                       text=_("There is no running game in this chat."))
+                       text=_("Não há nenhum jogo neste bate-papo."))
             return
 
     game = games[-1]
@@ -117,17 +117,17 @@ def kill_game(update: Update, context: CallbackContext):
 
         try:
             gm.end_game(chat, user)
-            send_async(context.bot, chat.id, text=__("Game ended!", multi=game.translate))
+            send_async(context.bot, chat.id, text=__("Jogo encerrado!", multi=game.translate))
 
         except NoGameInChatError:
             send_async(context.bot, chat.id,
-                       text=_("The game is not started yet. "
-                              "Join the game with /join and start the game with /start"),
+                       text=_("O jogo ainda não começou. "
+                              "Junte-se ao jogo com /join e comece o jogo com /start"),
                        reply_to_message_id=update.message.message_id)
 
     else:
         send_async(context.bot, chat.id,
-                  text=_("Only the game creator ({name}) and admin can do that.")
+                  text=_("Apenas o criador do jogo ({name}) e o administrador pode fazer isso.")
                   .format(name=game.starter.first_name),
                   reply_to_message_id=update.message.message_id)
 
@@ -144,29 +144,29 @@ def join_game(update: Update, context: CallbackContext):
         gm.join_game(update.message.from_user, chat)
 
     except LobbyClosedError:
-            send_async(context.bot, chat.id, text=_("The lobby is closed"))
+            send_async(context.bot, chat.id, text=_("O lobby está fechado"))
 
     except NoGameInChatError:
         send_async(context.bot, chat.id,
                    text=_("No game is running at the moment. "
-                          "Create a new game with /new"),
+                          "Crie um novo jogo com /new"),
                    reply_to_message_id=update.message.message_id)
 
     except AlreadyJoinedError:
         send_async(context.bot, chat.id,
-                   text=_("You already joined the game. Start the game "
-                          "with /start"),
+                   text=_("Você já entrou no jogo. Iniciar o jogo "
+                          "com /start"),
                    reply_to_message_id=update.message.message_id)
 
     except DeckEmptyError:
         send_async(context.bot, chat.id,
-                   text=_("There are not enough cards left in the deck for "
-                          "new players to join."),
+                   text=_("Não há cartas suficientes no baralho para "
+                          "novos jogadores para se juntarem."),
                    reply_to_message_id=update.message.message_id)
 
     else:
         send_async(context.bot, chat.id,
-                   text=_("Joined the game"),
+                   text=_("Entrou para o jogo"),
                    reply_to_message_id=update.message.message_id)
 
 
@@ -179,8 +179,8 @@ def leave_game(update: Update, context: CallbackContext):
     player = gm.player_for_user_in_chat(user, chat)
 
     if player is None:
-        send_async(context.bot, chat.id, text=_("You are not playing in a game in "
-                                        "this group."),
+        send_async(context.bot, chat.id, text=_("Você não está jogando em um jogo em "
+                                        "este grupo."),
                    reply_to_message_id=update.message.message_id)
         return
 
@@ -191,24 +191,24 @@ def leave_game(update: Update, context: CallbackContext):
         gm.leave_game(user, chat)
 
     except NoGameInChatError:
-        send_async(context.bot, chat.id, text=_("You are not playing in a game in "
-                                        "this group."),
+        send_async(context.bot, chat.id, text=_("Você não está jogando em um jogo em "
+                                        "este grupo."),
                    reply_to_message_id=update.message.message_id)
 
     except NotEnoughPlayersError:
         gm.end_game(chat, user)
-        send_async(context.bot, chat.id, text=__("Game ended!", multi=game.translate))
+        send_async(context.bot, chat.id, text=__("Jogo encerrado!", multi=game.translate))
 
     else:
         if game.started:
             send_async(context.bot, chat.id,
-                       text=__("Okay. Next Player: {name}",
+                       text=__("Okay, seu atleta. Próximo Jogador: {name}",
                                multi=game.translate).format(
                            name=display_name(game.current_player.user)),
                        reply_to_message_id=update.message.message_id)
         else:
             send_async(context.bot, chat.id,
-                       text=__("{name} left the game before it started.",
+                       text=__("{name} deixou o jogo antes de começar.",
                                multi=game.translate).format(
                            name=display_name(user)),
                        reply_to_message_id=update.message.message_id)
@@ -230,15 +230,15 @@ def kick_player(update: Update, context: CallbackContext):
 
     except (KeyError, IndexError):
             send_async(context.bot, chat.id,
-                   text=_("No game is running at the moment. "
-                          "Create a new game with /new"),
+                   text=_("Nenhum jogo está em execução no momento. "
+                          "Crie um novo jogo com /new"),
                    reply_to_message_id=update.message.message_id)
             return
 
     if not game.started:
         send_async(context.bot, chat.id,
-                   text=_("The game is not started yet. "
-                          "Join the game with /join and start the game with /start"),
+                   text=_("O jogo ainda não começou. "
+                          "Junte-se ao jogo com /join e comece o jogo com /start"),
                    reply_to_message_id=update.message.message_id)
         return
 
@@ -251,19 +251,19 @@ def kick_player(update: Update, context: CallbackContext):
                 gm.leave_game(kicked, chat)
 
             except NoGameInChatError:
-                send_async(context.bot, chat.id, text=_("Player {name} is not found in the current game.".format(name=display_name(kicked))),
+                send_async(context.bot, chat.id, text=_("Jogador {name} não é encontrado no jogo atual.".format(name=display_name(kicked))),
                                 reply_to_message_id=update.message.message_id)
                 return
 
             except NotEnoughPlayersError:
                 gm.end_game(chat, user)
                 send_async(context.bot, chat.id,
-                                text=_("{0} was kicked by {1}".format(display_name(kicked), display_name(user))))
-                send_async(context.bot, chat.id, text=__("Game ended!", multi=game.translate))
+                                text=_("{0} foi chutado por {1}".format(display_name(kicked), display_name(user))))
+                send_async(context.bot, chat.id, text=__("Jogo encerrado!", multi=game.translate))
                 return
 
             send_async(context.bot, chat.id,
-                            text=_("{0} was kicked by {1}".format(display_name(kicked), display_name(user))))
+                            text=_("{0} foi chutado por {1}".format(display_name(kicked), display_name(user))))
 
         else:
             send_async(context.bot, chat.id,
