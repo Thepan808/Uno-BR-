@@ -267,19 +267,19 @@ def kick_player(update: Update, context: CallbackContext):
 
         else:
             send_async(context.bot, chat.id,
-                text=_("Please reply to the person you want to kick and type /kick again."),
+                text=_("Por favor, responda à pessoa que você deseja dar um cacete e botar pra kitar, digite /kick outra vez."),
                 reply_to_message_id=update.message.message_id)
             return
 
         send_async(context.bot, chat.id,
-                   text=__("Okay. Next Player: {name}",
+                   text=__("Okay. Próximo Jogador: {name}",
                            multi=game.translate).format(
                        name=display_name(game.current_player.user)),
                    reply_to_message_id=update.message.message_id)
 
     else:
         send_async(context.bot, chat.id,
-                  text=_("Only the game creator ({name}) and admin can do that.")
+                  text=_("Apenas o criador do jogo ({name}) e o administrador pode fazer isso.")
                   .format(name=game.starter.first_name),
                   reply_to_message_id=update.message.message_id)
 
@@ -297,22 +297,22 @@ def select_game(update: Update, context: CallbackContext):
     else:
         send_async(bot,
                    update.callback_query.message.chat_id,
-                   text=_("Game not found."))
+                   text=_("Jogo não encontrado."))
         return
 
     def selected():
-        back = [[InlineKeyboardButton(text=_("Back to last group"),
+        back = [[InlineKeyboardButton(text=_("Voltar ao último grupo"),
                                       switch_inline_query='')]]
         context.bot.answerCallbackQuery(update.callback_query.id,
-                                text=_("Please switch to the group you selected!"),
+                                text=_("Mude para o grupo selecionado!"),
                                 show_alert=False,
                                 timeout=TIMEOUT)
 
         context.bot.editMessageText(chat_id=update.callback_query.message.chat_id,
                             message_id=update.callback_query.message.message_id,
-                            text=_("Selected group: {group}\n"
-                                   "<b>Make sure that you switch to the correct "
-                                   "group!</b>").format(
+                            text=_("Grupo selecionado: {group}\n"
+                                   "<b>Certifique-se de que muda para o correto "
+                                   "grupo!</b>").format(
                                 group=gm.userid_current[user_id].game.chat.title),
                             reply_markup=InlineKeyboardMarkup(back),
                             parse_mode=ParseMode.HTML,
@@ -337,10 +337,10 @@ def status_update(update: Update, context: CallbackContext):
             pass
         except NotEnoughPlayersError:
             gm.end_game(chat, user)
-            send_async(context.bot, chat.id, text=__("Game ended!",
+            send_async(context.bot, chat.id, text=__("Jogo encerrado!",
                                              multi=game.translate))
         else:
-            send_async(context.bot, chat.id, text=__("Removing {name} from the game",
+            send_async(context.bot, chat.id, text=__("Removeu {name} do jogo",
                                              multi=game.translate)
                        .format(name=display_name(user)))
 
@@ -357,17 +357,17 @@ def start_game(update: Update, context: CallbackContext):
             game = gm.chatid_games[chat.id][-1]
         except (KeyError, IndexError):
             send_async(context.bot, chat.id,
-                       text=_("There is no game running in this chat. Create "
-                              "a new one with /new"))
+                       text=_("Não há nenhum jogo em execução neste bate-papo. Criar "
+                              "um novo com /new"))
             return
 
         if game.started:
-            send_async(context.bot, chat.id, text=_("The game has already started"))
+            send_async(context.bot, chat.id, text=_("O jogo já começou"))
 
         elif len(game.players) < MIN_PLAYERS:
             send_async(context.bot, chat.id,
-                       text=__("At least {minplayers} players must /join the game "
-                              "before you can start it").format(minplayers=MIN_PLAYERS))
+                       text=__("Pelo menos {minplayers} os jogadores devem apertar /join ao jogo "
+                              "antes que você possa iniciá-lo").format(minplayers=MIN_PLAYERS))
 
         else:
             # Starting a game
@@ -375,11 +375,11 @@ def start_game(update: Update, context: CallbackContext):
 
             for player in game.players:
                 player.draw_first_hand()
-            choice = [[InlineKeyboardButton(text=_("Make your choice!"), switch_inline_query_current_chat='')]]
+            choice = [[InlineKeyboardButton(text=_("Faça a sua escolha!"), switch_inline_query_current_chat='')]]
             first_message = (
-                __("First player: {name}\n"
-                   "Use /close to stop people from joining the game.\n"
-                   "Enable multi-translations with /enable_translations",
+                __("Primeiro jogador: {name}\n"
+                   "Use /close para impedir que as pessoas entrem no jogo.\n"
+                   "Habilite multitraduções com /enable_translations",
                    multi=game.translate)
                 .format(name=display_name(game.current_player.user)))
 
@@ -414,7 +414,7 @@ def start_game(update: Update, context: CallbackContext):
             )
 
         send_async(context.bot, update.message.chat_id,
-                   text=_('Please select the group you want to play in.'),
+                   text=_('Por favor, selecione o grupo em que você quer jogar.'),
                    reply_markup=InlineKeyboardMarkup(groups))
 
     else:
@@ -430,20 +430,20 @@ def close_game(update: Update, context: CallbackContext):
 
     if not games:
         send_async(context.bot, chat.id,
-                   text=_("There is no running game in this chat."))
+                   text=_("Não há nenhum jogo neste bate-papo."))
         return
 
     game = games[-1]
 
     if user.id in game.owner:
         game.open = False
-        send_async(context.bot, chat.id, text=_("Closed the lobby. "
-                                        "No more players can join this game."))
+        send_async(context.bot, chat.id, text=_("Fechado o lobby. "
+                                        "Não há mais jogadores que possam participar deste jogo."))
         return
 
     else:
         send_async(context.bot, chat.id,
-                   text=_("Only the game creator ({name}) and admin can do that.")
+                   text=_("Apenas o criador do jogo ({name}) e o administrador pode fazer isso.")
                    .format(name=game.starter.first_name),
                    reply_to_message_id=update.message.message_id)
         return
@@ -458,19 +458,19 @@ def open_game(update: Update, context: CallbackContext):
 
     if not games:
         send_async(context.bot, chat.id,
-                   text=_("There is no running game in this chat."))
+                   text=_("Não há nenhum jogo neste bate-papo."))
         return
 
     game = games[-1]
 
     if user.id in game.owner:
         game.open = True
-        send_async(context.bot, chat.id, text=_("Opened the lobby. "
-                                        "New players may /join the game."))
+        send_async(context.bot, chat.id, text=_("Aberto o lobby. "
+                                        "Novos jogadores podem apertar /join para entrar ao jogo."))
         return
     else:
         send_async(context.bot, chat.id,
-                   text=_("Only the game creator ({name}) and admin can do that.")
+                   text=_("Apenas o criador do jogo ({name}) e o administrador pode fazer isso.")
                    .format(name=game.starter.first_name),
                    reply_to_message_id=update.message.message_id)
         return
@@ -485,20 +485,20 @@ def enable_translations(update: Update, context: CallbackContext):
 
     if not games:
         send_async(context.bot, chat.id,
-                   text=_("There is no running game in this chat."))
+                   text=_("Não há nenhum jogo de corrida neste bate-papo."))
         return
 
     game = games[-1]
 
     if user.id in game.owner:
         game.translate = True
-        send_async(context.bot, chat.id, text=_("Enabled multi-translations. "
-                                        "Disable with /disable_translations"))
+        send_async(context.bot, chat.id, text=_("Multitraduções habilitadas. "
+                                        "Desativar com /disable_translations"))
         return
 
     else:
         send_async(context.bot, chat.id,
-                   text=_("Only the game creator ({name}) and admin can do that.")
+                   text=_("Apenas o criador do jogo ({name}) e o administrador pode fazer isso.")
                    .format(name=game.starter.first_name),
                    reply_to_message_id=update.message.message_id)
         return
@@ -513,21 +513,21 @@ def disable_translations(update: Update, context: CallbackContext):
 
     if not games:
         send_async(context.bot, chat.id,
-                   text=_("There is no running game in this chat."))
+                   text=_("Não há nenhum jogo neste bate-papo."))
         return
 
     game = games[-1]
 
     if user.id in game.owner:
         game.translate = False
-        send_async(context.bot, chat.id, text=_("Disabled multi-translations. "
-                                        "Enable them again with "
+        send_async(context.bot, chat.id, text=_("Multitraduções desativadas. "
+                                        "Habilite-os novamente com "
                                         "/enable_translations"))
         return
 
     else:
         send_async(context.bot, chat.id,
-                   text=_("Only the game creator ({name}) and admin can do that.")
+                   text=_("Apenas o criador do jogo ({name}) e o administrador pode fazer isso.")
                    .format(name=game.starter.first_name),
                    reply_to_message_id=update.message.message_id)
         return
@@ -543,7 +543,7 @@ def skip_player(update: Update, context: CallbackContext):
     player = gm.player_for_user_in_chat(user, chat)
     if not player:
         send_async(context.bot, chat.id,
-                   text=_("You are not playing in a game in this chat."))
+                   text=_("Você não está jogando em um jogo neste bate-papo."))
         return
 
     game = player.game
@@ -558,8 +558,8 @@ def skip_player(update: Update, context: CallbackContext):
     if delta < skipped_player.waiting_time and player != skipped_player:
         n = skipped_player.waiting_time - delta
         send_async(context.bot, chat.id,
-                   text=_("Please wait {time} second",
-                          "Please wait {time} seconds",
+                   text=_("Aguarde {time} segundo",
+                          "Aguarde {time} Segundos",
                           n)
                    .format(time=n),
                    reply_to_message_id=update.message.message_id)
@@ -635,7 +635,7 @@ def reply_to_query(update: Update, context: CallbackContext):
             result.id += ':%d' % player.anti_cheat
 
         if players and game and len(players) > 1:
-            switch = _('Current game: {game}').format(game=game.chat.title)
+            switch = _('Jogo atual: {game}').format(game=game.chat.title)
 
     answer_async(context.bot, update.inline_query.id, results, cache_time=0,
                  switch_pm_text=switch, switch_pm_parameter='select')
@@ -657,7 +657,7 @@ def process_result(update: Update, context: CallbackContext):
     except (KeyError, AttributeError):
         return
 
-    logger.debug("Selected result: " + result_id)
+    logger.debug("Resultado selecionado: " + result_id)
 
     result_id, anti_cheat = result_id.split(':')
     last_anti_cheat = player.anti_cheat
@@ -676,7 +676,7 @@ def process_result(update: Update, context: CallbackContext):
         return
     elif int(anti_cheat) != last_anti_cheat:
         send_async(context.bot, chat.id,
-                   text=__("Cheat attempt by {name}", multi=game.translate)
+                   text=__("Tentativa de trapaça por {name}", multi=game.translate)
                    .format(name=display_name(player.user)))
         return
     elif result_id == 'call_bluff':
@@ -695,9 +695,9 @@ def process_result(update: Update, context: CallbackContext):
 
     if game_is_running(game):
         nextplayer_message = (
-            __("Next player: {name}", multi=game.translate)
+            __("Próximo jogador: {name}", multi=game.translate)
             .format(name=display_name(game.current_player.user)))
-        choice = [[InlineKeyboardButton(text=_("Make your choice!"), switch_inline_query_current_chat='')]]
+        choice = [[InlineKeyboardButton(text=_("Faça a sua escolha!"), switch_inline_query_current_chat='')]]
         send_async(context.bot, chat.id,
                         text=nextplayer_message,
                         reply_markup=InlineKeyboardMarkup(choice))
@@ -711,8 +711,8 @@ def reset_waiting_time(bot, player):
     if player.waiting_time < WAITING_TIME:
         player.waiting_time = WAITING_TIME
         send_async(bot, chat.id,
-                   text=__("Waiting time for {name} has been reset to {time} "
-                           "seconds", multi=player.game.translate)
+                   text=__("Tempo de espera para {name} foi redefinido para {time} "
+                           "Segundos", multi=player.game.translate)
                    .format(name=display_name(player.user), time=WAITING_TIME))
 
 
